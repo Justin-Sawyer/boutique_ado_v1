@@ -76,3 +76,141 @@
 | 22  | Site Owner | Add a product                                                     | Add new products to my store                                                          |
 | 23  | Site Owner | Edit/update a product                                             | Change the price, description, images etc of a product                                |
 | 24  | Site Owner | Delete a product                                                  | Remove items that aren't for sale anymore                                             |
+
+## ADDING ALLAUTH
+Allauth allows us to log in, log out, register etc...
+
+HOW TO ADD ALLAUTH
+
+1. INSTALL ALLAUTH:
+
+	`pip3 install django-allauth==0.41.0`
+
+2. ADD RELEVANT FILES FROM ALLAUTH DOCUMENTATION INTO settings.py:
+
+	In TEMPLATES of the settings.py file, comment added to ensure no deletion of this line of code:
+
+	`'django.template.context_processors.request', # Required by allauth`
+
+	Allows allauth and django itself for that matter to access the HTTP request object in our templates. Used frequently by allauth for "request.user", "request.user.email" etc.
+
+	—————————————
+
+	Add beneath TEMPLATES:
+
+	```
+	AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+	]
+	```
+
+	ModelBackend: Allows superusers to log in via the back end.
+
+	AuthenticationBackend: Allows users to log into our store via their email address.
+
+	—————————————
+
+	Add to INSTALLED_APPS:
+
+	```
+	'django.contrib.sites',
+	'allauth',
+	'allauth.account',
+	'allauth.socialaccount',
+	```
+	allauth: the app.
+
+	allauth.account: Allows all the basic user account stuff like logging in and out, user registration and password resets.
+
+	allauth.socialaccount: Handles logging in via social media providers like Facebook and Google.
+
+	django.contrib.sites: Used by the social account app to create the proper callback URLs when connecting via social media accounts, in conjunction with SITE_ID, below.
+
+	—————————————
+
+	Type beneath AUTHENTICATION_BACKENDS:
+
+	`SITE_ID = 1`
+
+	—————————————
+
+3. UPDATE urls.py
+	1. ADD PATH TO URLS.PY urlpatterns:
+
+		```
+		urlpatterns = [
+    	path('admin/', admin.site.urls),
+    	path('accounts', include('allauth.urls')),
+		]
+		```
+
+	2. IMPORT include FROM django.urls:
+
+		`from django.urls import path, include`
+
+		Gives app all the urls for logging in and out, password resets etc.
+
+4. MIGRATE:
+
+	`python3 manage.py migrate`
+
+5. RUN SERVER:
+
+	`python3 manage.py runserver`
+
+6. LOG IN AND CHANGE SITE'S NAMES:
+
+	boutiqueado.example.com
+
+	Boutique Ado
+
+## TESTING ALLAUTH
+
+1. ADD EMAIL_BACKEND variable TO settings.py:
+
+	`EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'`
+
+2. ADD EMAIL ACCOUNT CREATION CODE:
+
+	```
+	ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+	ACCOUNT_EMAIL_REQUIRED = True
+	ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+	ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
+	ACCOUNT_USERNAME_MIN_LENGTH = 4
+	LOGIN_URL = '/accounts/login/'
+	LOGIN_REDIRECT_URL = '/'
+	```
+
+3. CHANGE LOGIN_REDIRECT_URL:
+
+	`LOGIN_REDIRECT_URL = ‘/success’`
+
+4. RUN SERVER AND GOTO /accounts/login
+    1. Try to log in
+    2. Taken to “Confirm Email” page
+    3. Log out and goto /admin
+    4. “Verify” and “Primary” superuser’s email account
+    5. Log out
+    6. Log In at /account/login
+    7. 404 page - taken to /success which is our “false” success page
+
+5. CHANGE LOGIN_REDIRECT_URL BACK:
+
+	`LOGIN_REDIRECT_URL = '/'`
+
+6. FREEZE TO REQUIREMENTS.TXT:
+
+	`pip3 freeze > requirements.txt`
+
+7. COMMIT TO GIT:
+
+	```
+	git add . 
+	git commit - m 'initial commit'
+	git push
+	```
