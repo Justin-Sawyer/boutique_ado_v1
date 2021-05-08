@@ -277,7 +277,7 @@ HOW TO ADD ALLAUTH
 
 			`path('', views.index, name='home'),`
 
-            1. ‘linkname/‘ or ‘’ if home page (route url)
+            1. ‘linkname/‘ or ‘’ if home page (root url)
             2. what it should render (views.index for example)
             3. name=‘name of page to be rendered in the browser tab’
         8. Import views from the current directory: 
