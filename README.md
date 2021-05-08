@@ -214,3 +214,97 @@ HOW TO ADD ALLAUTH
 	git commit - m 'initial commit'
 	git push
 	```
+
+## TEMPLATES
+
+### HOW TO ADD THE BASE TEMPLATE
+
+1. COPY ALLAUTH TEMPLATES TO OUT OWN TEMPLATES DIRECTORY:
+
+	`cp -r ../.pip-modules/lib/python3.8/site-packages/allauth/templates/* ./templates/allauth`
+
+2. IN THE PROJECT LEVEL DIRECTORY, CREATE BASE TEMPLATE:
+    1. Create file called
+		base.html
+    2. Go to getbootstrap.com and get boilerplate html
+    3. Amend boilerplate
+    4. Above the !DOCTYPE, add {% load static %} for loading the css and js
+    5. Add extra meta, css, js blocks ({% block extra_css %}) for page level changes
+    6. Add title block {% block extra_title %} for page level title
+    7. Add `<header>` for navigation etc
+    8. Add messages block {% if messages %} and its `<div class=“message-container”>`
+    9. Add page_header block {% block page_header %}
+    10. Add content block {% block content %}
+    11. Add postloadjs block for post JS {% block postloadjs %}
+
+3. CREATE HOME APP
+    1. To create home:
+	
+		`python3 manage.py startapp home`
+
+    2. Make home directory: 
+
+		`mkdir -p home/templates/home`
+
+    3. Create index.html file in the INNER home directory
+    4. Extend “base.html”: {% extends “base.html” %}
+    5. Load static files: {% load static %}
+    6. Create content block and content:
+
+		```
+		{% block content %}
+			<h1 class="display-4 text-success">It works!</h1>
+		{% endblock%}
+		```
+
+    7. Add the view in the HOME directory’s views.py file:
+        1. As the html file we have created is called “index.html”, we create a view called “index”: 
+
+			`def index():`
+
+        2. index must inherit request: 
+
+			`def index(request):`
+
+        3. Return render the file: 
+
+			`return render(request, 'home/index.html')`
+
+        4. Create new urls.py file in the HOME app and copy from PROJECT LEVEL urls.py file
+        5. Remove unwanted imported items (such as “include”) from django.urls import
+        6. Remove `“”” docstring “””`
+        7. Add PATH to urlspattern: 
+
+			`path('', views.index, name='home'),`
+
+            1. ‘linkname/‘ or ‘’ if home page (route url)
+            2. what it should render (views.index for example)
+            3. name=‘name of page to be rendered in the browser tab’
+        8. Import views from the current directory: 
+
+			`from . import views`
+
+    8. Include home urls in project level urls.py file:
+        1. Add PATH to urlspattern: 
+
+			`path('', include('home.urls')),`
+
+    9. Add HOME to INSTALLED_APPS in settings.py
+    10. Import os to settings.py: 
+		
+		`import os`
+
+    11. Add ROOT templates directory and ALLAUTH templates directory to TEMPLATES = [ DIR=[ ] ]:
+
+		```
+		'DIRS': [
+    		os.path.join(BASE_DIR, 'templates'),
+    		os.path.join(BASE_DIR, 'templates', 'allauth'),
+		],
+		```
+
+4. PRAY while you start the development server:
+
+	`python3 manage.py runserver`
+
+5. Add, commit and push
