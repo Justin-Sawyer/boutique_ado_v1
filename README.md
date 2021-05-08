@@ -226,8 +226,8 @@ HOW TO ADD ALLAUTH
 2. IN THE PROJECT LEVEL DIRECTORY, CREATE BASE TEMPLATE:
     1. Create file called
 		base.html
-    2. Go to getbootstrap.com and get boilerplate html
-    3. Amend boilerplate
+    2. Go to [getbootstrap.com](https://getbootstrap.com/docs/4.4/getting-started/introduction/#starter-template) and get boilerplate html
+    3. Amend [boilerplate](https://www.icloud.com/notes/0HlikolTmtWcQmqtKzMDKsOuA)
     4. Above the !DOCTYPE, add {% load static %} for loading the css and js
     5. Add extra meta, css, js blocks ({% block extra_css %}) for page level changes
     6. Add title block {% block extra_title %} for page level title
