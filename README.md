@@ -219,7 +219,7 @@ HOW TO ADD ALLAUTH
 
 ### HOW TO ADD THE BASE TEMPLATE
 
-1. COPY ALLAUTH TEMPLATES TO OUT OWN TEMPLATES DIRECTORY:
+1. COPY ALLAUTH TEMPLATES TO OUR OWN TEMPLATES DIRECTORY:
 
 	`cp -r ../.pip-modules/lib/python3.8/site-packages/allauth/templates/* ./templates/allauth`
 
@@ -237,7 +237,7 @@ HOW TO ADD ALLAUTH
     10. Add content block {% block content %}
     11. Add postloadjs block for post JS {% block postloadjs %}
 
-3. CREATE HOME APP
+3. CREATE HOME APP:
     1. To create home:
 	
 		`python3 manage.py startapp home`
