@@ -1,52 +1,45 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Boutique Ado e-commerce store
 
-Welcome Justin-Sawyer,
+## Built using Django
 
-This is the Code Institute student template for Gitpod. We have preinstalled all of the tools you need to get started. You can safely delete this README.md file, or change it for your own project. Please do read it at least once, though! It contains some important information about Gitpod and the extensions we use.
+## HOW THIS PROJECT WAS SET UP:
 
-## Gitpod Reminders
+  1. INSTALL DJANGO:
 
-To run a frontend (HTML, CSS, Javascript only) application in Gitpod, in the terminal, type:
+		`pip3 install django`
 
-`python3 -m http.server`
+  2. CREATE PROJECT ITSELF:
 
-A blue button should appear to click: _Make Public_,
+		`django-admin startproject boutique_ado .`
 
-Another blue button should appear to click: _Open Browser_.
+  3. CREATE .GITIGNORE FILE:
 
-To run a backend Python file, type `python3 app.py`, if your Python file is named `app.py` of course.
+		`touch .gitignore`
 
-A blue button should appear to click: _Make Public_,
+4. ADD FILES TO .GITIGNORE:
 
-Another blue button should appear to click: _Open Browser_.
+	```
+	*.sqlite3
+	*.pyc
+	__pycache__/
+	```
 
-In Gitpod you have superuser security privileges by default. Therefore you do not need to use the `sudo` (superuser do) command in the bash terminal in any of the lessons.
+5. RUN SERVER:
 
-To log into the Heroku toolbelt CLI you can use:
+	`python3 manage.py runserver`
 
-`heroku login -i`
+6. MIGRATE FILES:
 
-If you have Multi-Factor Authentication (MFA) enabled then use the API key that was generated for you at [Heroku](https://dashboard.heroku.com/account) as your password.
-This API key is unique and private to you so do not share it. If you accidently make it public then you can create a new one with _Regenerate API Key_.
+	`python3 manage.py migrate`
 
-## Updates Since The Instructional Video
+7. CREATE SUPERUSER:
 
-We continually tweak and adjust this template to help give you the best experience. Here is the version history:
+	`python3 manage.py createsuperuser`
 
-**October 21 2020:** Versions of the HTMLHint, Prettier, Bootstrap4 CDN and Auto Close extensions updated. The Python extension needs to stay the same version for now.
+8. COMMIT TO GIT:
 
-**October 08 2020:** Additional large Gitpod files (`core.mongo*` and `core.python*`) are now hidden in the Explorer, and have been added to the `.gitignore` by default.
-
-**September 22 2020:** Gitpod occasionally creates large `core.Microsoft` files. These are now hidden in the Explorer. A `.gitignore` file has been created to make sure these files will not be committed, along with other common files.
-
-**April 16 2020:** The template now automatically installs MySQL instead of relying on the Gitpod MySQL image. The message about a Python linter not being installed has been dealt with, and the set-up files are now hidden in the Gitpod file explorer.
-
-**April 13 2020:** Added the _Prettier_ code beautifier extension instead of the code formatter built-in to Gitpod.
-
-**February 2020:** The initialisation files now _do not_ auto-delete. They will remain in your project. You can safely ignore them. They just make sure that your workspace is configured correctly each time you open it. It will also prevent the Gitpod configuration popup from appearing.
-
-**December 2019:** Added Eventyret's Bootstrap 4 extension. Type `!bscdn` in a HTML file to add the Bootstrap boilerplate. Check out the <a href="https://github.com/Eventyret/vscode-bcdn" target="_blank">README.md file at the official repo</a> for more options.
-
----
-
-Happy coding!
+	```
+	git add . 
+	git commit - m 'initial commit'
+	git push
+	```
