@@ -303,8 +303,8 @@ HOW TO ADD ALLAUTH
 		],
 		```
 
-4. PRAY while you start the development server:
+4. PRAY WHILE YOU START THE DEVELOPMENT SERVER:
 
 	`python3 manage.py runserver`
 
-5. Add, commit and push
+5. ADD, COMMIT and PUSH
