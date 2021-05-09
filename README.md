@@ -316,19 +316,33 @@ HOW TO ADD ALLAUTH
 ## MANAGING STATIC FILES
 [Documentation](https://docs.djangoproject.com/en/3.2/howto/static-files/)
 
-1. ADD STATICFILES_DIR TO settings.py UNDER THE STATIC_URL SETTING:
+### CSS
+
+1. CREATE STATIC DIRECTRORY AND ADD base.css FILE
+
+	This is where the base CSS will live
+
+2. ADD STATICFILES_DIR TO settings.py UNDER THE STATIC_URL SETTING:
 
 	1. Join the path using os, making sure that it is a tuple:
 		
 		`STATICFILES_DIR = ((os.path.join(BASE_DIR, 'static),)`
 
-	2. Add MEDIA_URL:
+### MEDIA
+
+1. CREATE MEDIA DIRECTORY
+
+	This is where images will live
+
+2. Add MEDIA_URL TO settings.py:
 	
-		`MEDIA_URL = '/media/'`
+	`MEDIA_URL = '/media/'`
 
-	3. Add MEDIA_ROOT path:
+3. Add MEDIA_ROOT path:
 
-		`MEDIA_ROOT = (os.pth.join(BASE_DIR, 'media')`
+	`MEDIA_ROOT = (os.pth.join(BASE_DIR, 'media')`
+
+### IMPORTING
 
 2. IMPORT STATIC TO HOME DIRECTORY urls_py:
 
@@ -338,7 +352,8 @@ HOW TO ADD ALLAUTH
 	
 	```
 	urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')),
-    path('', include('home.urls')),
+    	path('admin/', admin.site.urls),
+    	path('accounts/', include('allauth.urls')),
+    	path('', include('home.urls')),
 	] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+	```
