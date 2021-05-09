@@ -2,7 +2,7 @@
 
 ## Built using Django
 
-## HOW THIS PROJECT WAS SET UP:
+## HOW THIS PROJECT WAS SET UP
 
   1. INSTALL DJANGO:
 
@@ -308,3 +308,37 @@ HOW TO ADD ALLAUTH
 	`python3 manage.py runserver`
 
 5. ADD, COMMIT and PUSH
+
+## TEMPLATE TAGS AND FILTERS
+
+[Built-in template tags and filters](https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#built-in-template-tags-and-filters)
+
+## MANAGING STATIC FILES
+[Documentation](https://docs.djangoproject.com/en/3.2/howto/static-files/)
+
+1. ADD STATICFILES_DIR TO settings.py UNDER THE STATIC_URL SETTING:
+
+	1. Join the path using os, making sure that it is a tuple:
+		
+		`STATICFILES_DIR = ((os.path.join(BASE_DIR, 'static),)`
+
+	2. Add MEDIA_URL:
+	
+		`MEDIA_URL = '/media/'`
+
+	3. Add MEDIA_ROOT path:
+
+		`MEDIA_ROOT = (os.pth.join(BASE_DIR, 'media')`
+
+2. IMPORT STATIC TO HOME DIRECTORY urls_py:
+
+	`from django.conf.urls.static import static`
+
+3. ADD PATH TO HOME DIRECTORY'S urls.py's urlpatterns:
+	
+	```
+	urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
+    path('', include('home.urls')),
+	] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
