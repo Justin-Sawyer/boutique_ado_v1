@@ -1,8 +1,23 @@
 # Boutique Ado e-commerce store
 
-## Built using Django
+# Built using Django
 
-## HOW THIS PROJECT WAS SET UP
+- [SET UP](#set-up)
+- [USER STORIES](#user-stories)
+- [ALLAUTH](#allauth)
+  * [ADDING ALLAUTH](#adding-allauth)
+  * [TESTING ALLAUTH](#testing-allauth)
+- [TEMPLATES](#templates)
+  * [HOW TO ADD THE BASE TEMPLATE](#how-to-add-the-base-template)
+  * [TEMPLATE TAGS AND FILTERS](#template-tags-and-filters)
+- [MANAGING STATIC FILES](#managing-static-files)
+  * [CSS](#css)
+  * [MEDIA](#media)
+  * [IMPORTING](#importing)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+# SET UP
 
   1. INSTALL DJANGO:
 
@@ -43,7 +58,7 @@
 	git commit - m 'initial commit'
 	git push
 	```
-## USER STORIES
+# USER STORIES
 
 | ID  | As A/An    | I want to...                                                      | So I can...                                                                           |
 | --- | ---------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
@@ -77,6 +92,7 @@
 | 23  | Site Owner | Edit/update a product                                             | Change the price, description, images etc of a product                                |
 | 24  | Site Owner | Delete a product                                                  | Remove items that aren't for sale anymore                                             |
 
+# ALLAUTH
 ## ADDING ALLAUTH
 Allauth allows us to log in, log out, register etc...
 
@@ -215,9 +231,9 @@ HOW TO ADD ALLAUTH
 	git push
 	```
 
-## TEMPLATES
+# TEMPLATES
 
-### HOW TO ADD THE BASE TEMPLATE
+## HOW TO ADD THE BASE TEMPLATE
 
 1. COPY ALLAUTH TEMPLATES TO OUR OWN TEMPLATES DIRECTORY:
 
@@ -313,10 +329,10 @@ HOW TO ADD ALLAUTH
 
 [Built-in template tags and filters](https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#built-in-template-tags-and-filters)
 
-## MANAGING STATIC FILES
+# MANAGING STATIC FILES
 [Documentation](https://docs.djangoproject.com/en/3.2/howto/static-files/)
 
-### CSS
+## CSS
 
 1. CREATE STATIC DIRECTRORY AND ADD base.css FILE
 
@@ -328,7 +344,7 @@ HOW TO ADD ALLAUTH
 		
 		`STATICFILES_DIR = ((os.path.join(BASE_DIR, 'static),)`
 
-### MEDIA
+## MEDIA
 
 1. CREATE MEDIA DIRECTORY
 
@@ -342,7 +358,7 @@ HOW TO ADD ALLAUTH
 
 	`MEDIA_ROOT = (os.pth.join(BASE_DIR, 'media')`
 
-### IMPORTING
+## IMPORTING
 
 2. IMPORT STATIC TO HOME DIRECTORY urls_py:
 
