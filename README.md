@@ -1,23 +1,23 @@
-# Boutique Ado e-commerce store
+ # Boutique Ado e-commerce store
 
 # Built using Django
 
-- [SET UP](#set-up)
-- [USER STORIES](#user-stories)
-- [ALLAUTH](#allauth)
-  * [ADDING ALLAUTH](#adding-allauth)
-  * [TESTING ALLAUTH](#testing-allauth)
-- [TEMPLATES](#templates)
-  * [HOW TO ADD THE BASE TEMPLATE](#how-to-add-the-base-template)
-  * [TEMPLATE TAGS AND FILTERS](#template-tags-and-filters)
-- [MANAGING STATIC FILES](#managing-static-files)
+- [Set Up](#set-up)
+- [User Stories](#user-stories)
+- [AllAuth](#allauth)
+  * [Adding](#adding)
+  * [Testig](#testing)
+- [Templates](#templates)
+  * [Adding the base template](#adding-the-base-template)
+  * [Template Tags And Filters](#template-tags-and-filters)
+- [Managing Static Files](#managing-static-files)
   * [CSS](#css)
-  * [MEDIA](#media)
-  * [IMPORTING](#importing)
+  * [Media](#media)
+  * [Importing](#importing)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
-# SET UP
+# Set Up
 
   1. INSTALL DJANGO:
 
@@ -58,7 +58,7 @@
 	git commit - m 'initial commit'
 	git push
 	```
-# USER STORIES
+# User Stories
 
 | ID  | As A/An    | I want to...                                                      | So I can...                                                                           |
 | --- | ---------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
@@ -92,8 +92,8 @@
 | 23  | Site Owner | Edit/update a product                                             | Change the price, description, images etc of a product                                |
 | 24  | Site Owner | Delete a product                                                  | Remove items that aren't for sale anymore                                             |
 
-# ALLAUTH
-## ADDING ALLAUTH
+# AllAuth
+## Adding
 Allauth allows us to log in, log out, register etc...
 
 HOW TO ADD ALLAUTH
@@ -184,7 +184,7 @@ HOW TO ADD ALLAUTH
 
 	Boutique Ado
 
-## TESTING ALLAUTH
+## Testing
 
 1. ADD EMAIL_BACKEND variable TO settings.py:
 
@@ -231,9 +231,9 @@ HOW TO ADD ALLAUTH
 	git push
 	```
 
-# TEMPLATES
+# Templates
 
-## HOW TO ADD THE BASE TEMPLATE
+## Adding The Base Template
 
 1. COPY ALLAUTH TEMPLATES TO OUR OWN TEMPLATES DIRECTORY:
 
@@ -325,11 +325,11 @@ HOW TO ADD ALLAUTH
 
 5. ADD, COMMIT and PUSH
 
-## TEMPLATE TAGS AND FILTERS
+## Template Tags And Filters
 
 [Built-in template tags and filters](https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#built-in-template-tags-and-filters)
 
-# MANAGING STATIC FILES
+# Managing Static Files
 [Documentation](https://docs.djangoproject.com/en/3.2/howto/static-files/)
 
 ## CSS
@@ -344,7 +344,7 @@ HOW TO ADD ALLAUTH
 		
 		`STATICFILES_DIR = ((os.path.join(BASE_DIR, 'static),)`
 
-## MEDIA
+## Media
 
 1. CREATE MEDIA DIRECTORY
 
@@ -358,13 +358,13 @@ HOW TO ADD ALLAUTH
 
 	`MEDIA_ROOT = (os.pth.join(BASE_DIR, 'media')`
 
-## IMPORTING
+## Importing
 
-2. IMPORT STATIC TO HOME DIRECTORY urls_py:
+1. IMPORT STATIC TO HOME DIRECTORY urls_py:
 
 	`from django.conf.urls.static import static`
 
-3. ADD PATH TO HOME DIRECTORY'S urls.py's urlpatterns:
+2. ADD PATH TO HOME DIRECTORY'S urls.py's urlpatterns:
 	
 	```
 	urlpatterns = [
@@ -373,3 +373,5 @@ HOW TO ADD ALLAUTH
     	path('', include('home.urls')),
 	] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 	```
+
+
