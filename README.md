@@ -6,14 +6,18 @@
 - [User Stories](#user-stories)
 - [AllAuth](#allauth)
   * [Adding](#adding)
-  * [Testig](#testing)
+  * [Testing](#testing)
 - [Templates](#templates)
-  * [Adding the base template](#adding-the-base-template)
+  * [Adding The Base Template](#adding-the-base-template)
   * [Template Tags And Filters](#template-tags-and-filters)
+    + [{% include %}](#---include---)
 - [Managing Static Files](#managing-static-files)
   * [CSS](#css)
   * [Media](#media)
   * [Importing](#importing)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -328,6 +332,24 @@ HOW TO ADD ALLAUTH
 ## Template Tags And Filters
 
 [Built-in template tags and filters](https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#built-in-template-tags-and-filters)
+
+### {% include %}
+
+Include is a way to keep parts of files separate. For example, if a site has a mobile nav and a main nav, we can split these into separate templates, and then insert each into the base template. 
+
+This keeps the base template tidy and less cluttered, and allows for quicker editing if only part of the main nav needs editing but the  mobile nav doesn't.
+
+1. Create a folder in the template directory and name it "includes"
+
+2. Add relevant templates (such as main-nav.html etc) and HTML code
+
+3. Use {% include %} template where needed (base.html etc):
+
+	`{% include 'includes/main-nav.html' %}`
+
+4. Ensure that the tempate is being imported in urls.py:
+
+	`from django.urls import include`
 
 # Managing Static Files
 [Documentation](https://docs.djangoproject.com/en/3.2/howto/static-files/)
