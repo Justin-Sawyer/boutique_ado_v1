@@ -19,6 +19,7 @@
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 - ### [PRODUCTS app](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/PRODUCTS.md)
+- ### [SEARCH](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/SEARCH.md)
 
 # Set Up
 

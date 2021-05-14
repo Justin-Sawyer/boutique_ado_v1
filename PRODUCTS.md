@@ -316,4 +316,5 @@
 8. Create the HTML template
 9. Git add, commit, push
 
-
+- ### [README](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/README.md)
+- ### [SEARCH](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/SEARCH.md)
