@@ -194,7 +194,7 @@
 		admin.site.register(Category, CategoryAdmin)
 		```
 
-### Views:
+### Views
 
 1. In products/views.py we can import our project level home/views.py file and change the necessary fields. So for example:
 
