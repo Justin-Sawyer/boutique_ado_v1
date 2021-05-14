@@ -284,3 +284,36 @@
 
 6. Git add, commit, push
 
+### Individual Product Template
+
+1. Create template view in the directory/views.py file
+2. The function needs the product_id as an argument
+3. Instead of calling all objects, we call ONE using get_object_or_404() and posting in the arguments of the Model and the individual item’s id
+4. The context needs updating, as we call ONE product
+5. The render link needs updating for the same reason
+
+	```
+	def product_detail(request, product_id):
+    	""" A view to show all individual product details """
+
+    	product = get_object_or_404(Product, pk=product_id)
+
+    	context = {
+    	    'product': product,
+    	}
+
+    	return render(request, 'products/product_detail.html', context)
+	```
+
+6. Import get_object_or_404 if not done already
+
+	`from django.shortcuts import render, get_object_or_404`
+
+7. Update the urlpatterns in urls.py. As we want to render the product id, we stipulate the product_id as the first argument:
+
+	`path('<product_id>', views.product_detail, name='product_detail'),`
+
+8. Create the HTML template
+9. Git add, commit, push
+
+
