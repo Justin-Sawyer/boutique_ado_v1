@@ -152,3 +152,134 @@
 	`python3 manage.py runserver`
 
 15. git add, commit, push
+
+## Admin
+### Tidying:
+
+1. Add Meta class and stipulate plural name if needed to model itself in products/models.py:
+
+	```
+	class Category(models.Model):
+    		class Meta:
+        		verbose_name_plural = 'Categories'
+	```
+
+2. In products/admin.py, tell DB which field keys we want admin to see :
+	1. Create classes:
+
+		```
+		# Register your models here.
+		class ProductAdmin(admin.ModelAdmin):
+		class CategoryAdmin(admin.ModelAdmin):
+		```
+
+	2. Use list_dislpay tuple to list fields:
+
+		```
+		class CategoryAdmin(admin.ModelAdmin):
+			list_display = (
+				'friendly_name',
+				'name',
+			)
+		```
+
+3. Change ordering of display on backend if necessary. This is a tuple!:
+
+	`ordering = ('sku',)`
+
+4. Import classes from .models if not done already
+5. Register classes:
+
+	```
+	admin.site.register(Product, ProductAdmin)
+	admin.site.register(Category, CategoryAdmin)
+	```
+
+### Views:
+
+1. In products/views.py we can import our project level home/views.py file and change the necessary fields. So for example:
+
+	```
+	def all_products(request):
+			""" A view to show all products, including sorting and search queries """
+			return render(request, 'products/products.html')
+	```
+
+2. Import the Product model:
+
+	`from .models import Product`
+
+3. Import all products to the function view:
+
+	```
+	def all_products(request):
+		""" A view to show all products, including sorting and search queries """
+
+		products = Product.objects.all()
+
+		return render(request, 'products/products.html')
+	```
+
+4. Add context to the return render and add the context dictionary to the function view:
+
+	```
+	def all_products(request):
+		""" A view to show all products, including sorting and search queries """
+
+		products = Product.objects.all()
+
+		context = {
+			'products': products,
+		}
+
+		return render(request, 'products/products.html', context)
+
+	```		
+### URLs
+
+1. Copy home/urls.py as base for products/urls.py
+2. Change the urlpatterns:
+
+	```
+	urlpatterns = [
+		path('', views.all_products, name='products'),
+	]
+	```
+
+3. Include these urls in the urlpatterns of the project level urls.py file and give them a top-level url name:
+
+	```
+	urlpatterns = [
+		path('admin/', admin.site.urls),
+		path('accounts/', include('allauth.urls')),
+		path('', include('home.urls')),
+		path('products/‘, include('products.urls')),
+	] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+	```
+
+### Template
+
+1. Create the appropriate directories. Remember we're creating that inner products directory to make sure that django knows which app these templates belong to: 
+
+	`mkdir -p products/templates/products`
+
+2. Create a products.html fileinside that directory and copy the content of the home template in as a shell.
+3. Adjust HTML as needed.
+4. Add template literal to make sure that the relevant things are being read from the DB: 
+
+	`{{ products }}`
+
+5. If DB details show up, we can then go about building the page using more template literals. In this example we’ve used:
+	1. Loops: 
+
+		`{% for product in products %}`
+
+	2. If statements: 
+
+		`{% if product.image %}`
+
+	3. If [forloop.counter](https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#for): 
+
+		`{% if forloop.counter|divisibleby:2 %}`
+
+6. Git add, commit, push
