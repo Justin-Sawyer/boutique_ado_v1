@@ -20,6 +20,8 @@
 
 - ### [PRODUCTS app](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/PRODUCTS.md)
 - ### [SEARCH](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/SEARCH.md)
+- ### [SORTING](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/SORTING.md)
+
 
 # Set Up
 
