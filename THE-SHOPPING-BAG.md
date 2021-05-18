@@ -114,3 +114,136 @@ When dealing with money, [Decimal](https://docs.python.org/3/library/decimal.htm
 13. Check it all renders
 
 14. git add, commit, push
+
+## Adding Products to the Shopping Bag
+### Adding quantity, item_id and the Product
+
+1. Add form to relevant page
+2. Add `{% csrf_token %}` to the form as we are POST submitting it
+3. Write view in bag app bag/views.py
+    1. The function needs to take in request and item_id:
+
+		`def add_to_bag(request, item_id):`
+
+    2. Add docstring
+    3. Get quantity and set it as quantity variable. Convert quantity to int: 
+
+		`quantity = int(request.POST.get('quantity'))`
+
+    4. Get url for redirect once quantity has been added to bag: 
+
+		`redirect_url = request.POST.get('redirect_url')`
+
+		1. This redirect come from the hidden input in the HTML form: 
+
+			`<input type="hidden" name="redirect_url" value="{{ request.path }}">`
+
+    5. Get or Set session cookie: 
+		
+		`bag = request.session.get('bag', {})`
+
+        1. get ‘bag’ if it exists, set ‘bag’ as empty {dictionary} if it doesn’t
+
+    6. Create bag key and set the item_id (the key) to be equal to the quantity (the value): 
+
+		`bag[item_id] = quantity`
+
+        1. This will return a dictionary of {item_id: quantity}
+
+    7. If the item is already listed in the bag - in other words if there's already a key in the bag dictionary matching this product id, then increment its quantity accordingly:
+
+		```
+		if item_id in list(bag.keys()):
+    		bag[item_id] += quantity
+		else:
+    		bag[item_id] = quantity
+		```
+
+    8. Add the bag variable into the session, which itself is just a python dictionary:
+		`request.session['bag'] = bag`
+
+    9. Import redirect: 
+
+		`from django.shortcuts import render, redirect`
+
+    10. Redirect back to the redirect_url variable: 
+
+		`return redirect(redirect_url)`
+
+4. Add path in bag/urls.py: 
+
+	`path('add/<item_id>/', views.add_to_bag, name='add_to_bag'),`
+
+5. Add url path to the action in the HTML form: 
+
+	`action="{% url 'add_to_bag' product.id %}"`
+
+6. Test by printing the shopping bag from the session in the add to bag view: 
+
+	`print(request.session['bag'])`
+
+7. git add, commit, push
+
+8. Access the shopping bag in the session in contexts.py
+    1. As step 3, 5 above, but in contexts.py bag_contents()
+
+9. Populate the values in the (at the moment empty) [bag_items] with the bag.items from the session cookie:
+    1. Iterate through item and quantity: 
+
+		`for item_id, quantity in bag.items():`
+
+    2. Get the Product object or 404: 
+
+		`product = get_object_or_404(Product, pk=item_id)`
+
+    3. Add append quantity*price to total: 
+
+		`total += quantity * product.price`
+
+    4. Update the product_count: 
+
+		`product_count += quantity`
+
+    5. Append dictionary of item_id, quantity and the product object to bag_items. Getting the product object makes its other fields (image, etc) available:
+
+		```
+		bag_items.append({
+        	'item_id': item_id,
+        	'quantity': quantity,
+        	'product': product
+    	})
+		```
+
+10. Import get_object_or_404: 
+
+	`from django.shortcuts import get_object_or_404`
+
+11. Import the Product model: 
+	
+	`from products.models import Product`
+
+12. Render the bag items on the screen:
+
+	```
+	{% if bag_items %}
+    	<div class="table-responsive rounded">
+        	{{ bag_items }}
+    	</div>
+	{% else %}
+	```
+
+13. If ok, git add, commit
+
+14. Assuming that there is information being passed into the {{ bag_items }} template, we can now write the HTML to extract the details by looping through what is in the bag:
+
+	```
+	{% for item in bag_items %}
+    <tr>
+        <td class="p-3 w-25">
+            <img class="img-fluid rounded" src="{{ item.product.image.url }}" alt="Item image">
+        </td>
+	```
+
+    1. Note that in the src, we’re calling the item iteration, then the product, then the entry required (url, price…)
+
+15. git add, commit, push
