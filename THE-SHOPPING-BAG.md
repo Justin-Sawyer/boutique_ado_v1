@@ -247,3 +247,79 @@ When dealing with money, [Decimal](https://docs.python.org/3/library/decimal.htm
     1. Note that in the src, we’re calling the item iteration, then the product, then the entry required (url, price…)
 
 15. git add, commit, push
+
+## Adding extra fields to DB entries:
+
+Since some products might have different data fields - like sizes for clothing, lack of sizes for non clothing items or weights for food items - we need to add the field in the DB, the Product model and of course, in the HTML. The easiest way to do this is in the shell.
+
+1. Add field to Product class: 
+
+	`has_sizes = models.BooleanField(default=False, null=True, blank=True)`
+
+2. Run migrations as we’re changing the structure of the DB
+    1. Dry run to check first: 
+
+		`python3 manage.py makemigrations --dry-run`
+
+    2. Make migrations: 
+
+		`python3 manage.py makemigrations`
+
+    3. Flag migrate changes: 
+
+		`python3 manage.py migrate --flag`
+
+    4. Migrate: 
+
+		`python3 manage.py migrate`
+
+3. Open shell. From the shell, we can easily set which do and which do not have the field we’ve added
+    1. Open shell command: 
+
+		`python3 manage.py shell`
+
+    2. Import the Product model: 
+
+		`from (app).models import Product`
+
+    3. Create a variable to hold a list of categories we want to ignore: 
+	
+		`name_of_variable = [‘category_name’, ‘category_name’]`
+
+    4. Use the exclude() method to get all other categories: 
+
+		`others = Product.objects.exclude(category__name__in=name_of_variable)`
+
+    5. Get the count(): 
+
+		`others.count()`
+
+    6. Loop through and add the new field:
+
+		```
+		for item in others:
+			item.has_sizes = True
+			item.save()
+		```
+
+    7. Filter() to check: 
+
+		`Product.objects.filter(has_sizes=True)`
+
+    8. Get the count again to check all applied: 
+
+		`Product.objects.filter(has_sizes=True).count()`
+
+    9. Exit the shell: 
+
+		`exit()`
+
+4. Add the HTML and template logic to the HTML
+5. Use the with block, in order to reuse the loop if the product has sizes:
+
+	```
+	{% with product.has_sizes as s %}
+	{% if s %}
+	{% endif %}
+	{% endwith %}
+	```
