@@ -323,3 +323,147 @@ Since some products might have different data fields - like sizes for clothing, 
 	{% endif %}
 	{% endwith %}
 	```
+
+## Adding these extra fields to the view and the context processor
+### Updating the view
+
+1. Set size initially to None: 
+
+	`size = None`
+
+2. If product_size is in request.POST, set size to equal request.POST(‘size’):
+
+    ```
+	if 'product_size' in request.POST:
+        size = request.POST[‘product_size']
+	```
+
+3. If size statement: 
+
+	```
+	# if size in post request
+	if size:
+		# If the item is already in the bag
+		if item_id in list(bag.keys()):
+			# Check if another item of the same id and same size already exists
+			if size in bag[item_id]['items_by_size'].keys():
+				# if yes, increment the quantity for that size
+				bag[item_id]['items_by_size'][size] += quantity
+			# If item of the same id and same size does not exist in the bag
+			else:
+				# Add the quantity for that size
+                bag[item_id]['items_by_size'][size] = quantity
+		# If the item is not already in the bag
+		else:
+			# Add the item to the bag
+			bag[item_id] = {'items_by_size': {size: quantity}}
+	```
+
+    If the item is not already in the bag, add it as a dictionary with a key of ‘items_by_size’ since there may be multiple items with this item_id, but in different sizes. This allows structuring the bag such that we can have a single item id for each item, but still track multiple sizes.
+
+4. Else (if no size in post request) statement is the original code wrapped in the else block:
+
+	```
+	else:
+        if item_id in list(bag.keys()):
+            bag[item_id] += quantity
+        else:
+            bag[item_id] = quantity
+	```
+
+### Updating contexts.py
+
+1. Since there are now two different types of data that might be in our bag items - with sizes and without sizes - the loop variable - quantity - needs to be changed to something more generic, like item_data:
+    1. In the case of an item with no sizes, the item_data will just be the quantity.
+    2. But in the case of an item that has sizes the item_data will be a dictionary of all the items_by_size.
+    3. The key in the template remains as ‘quantity’ since we do still want that to actually be called quantity.
+
+		```
+		for item_id, item_data in bag.items():
+    		product = get_object_or_404(Product, pk=item_id)
+    		total += item_data * product.price
+    		product_count += item_data
+    		bag_items.append({
+        		'item_id': item_id,
+        		'quantity': item_data,
+        		'product': product
+    			})
+		```
+
+2. The entire amended contexts.py code block below:
+	1. `if isinstance(item_data, int)` block deals with items without sizes
+	2. `else` block deals with items with sizes
+
+		```
+		def bag_contents(request):
+
+			bag_items = []
+			total = 0
+			product_count = 0
+			bag = request.session.get('bag', {})
+
+			for item_id, item_data in bag.items():
+			# Since quantity will always be an Integer:
+				if isinstance(item_data, int):
+					product = get_object_or_404(Product, pk=item_id)
+					total += item_data * product.price
+					product_count += item_data
+					bag_items.append({
+						'item_id': item_id,
+						'quantity': item_data,
+						'product': product
+					})
+				else:
+					product = get_object_or_404(Product, pk=item_id)
+					for size, quantity in item_data['items_by_size'].items():
+						total += quantity * product.price
+						product_count += quantity
+						bag_items.append({
+							'item_id': item_id,
+							'quantity': item_data,
+							'product': product,
+							'size': size
+						})
+
+			if total < settings.FREE_DELIVERY_THRESHOLD:
+				delivery = total * Decimal(settings.STANDARD_DELIVERY_PRECENTAGE)
+				free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
+			else:
+				delivery = 0
+				free_delivery_delta = 0
+
+			grand_total = delivery + total
+
+			context = {
+				'bag_items': bag_items,
+				'total': total,
+				'product_count': product_count,
+				'delivery': delivery,
+				'free_delivery_delta': free_delivery_delta,
+				'free_delivery_threshold': settings.FREE_DELIVERY_THRESHOLD,
+				'grand_total': grand_total,
+			}
+
+			return context
+		```
+
+Visual representation of amended code:
+
+```
+{
+  "9": 1,		# Integer, thus object without size
+  "21": 1,		# Integer, thus object without size
+  "37": 8,		# Integer, thus object without size
+  "73": {		# Dictionary, thus object with size
+    "items_by_size": {
+      "m": 1
+    }
+  },
+  "139": {		# Dictionary, thus object with size
+    "items_by_size": {
+      "m": 1,
+      "xl": 1
+    }
+  }
+}
+```
