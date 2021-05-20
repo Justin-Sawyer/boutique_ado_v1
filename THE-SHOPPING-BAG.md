@@ -801,3 +801,7 @@ The bag at the moment just display the template quantity value. We can change th
 	}
 	```
 
+- ### [README](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/README.md)
+- ### [PRODUCTS app](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/PRODUCTS.md)
+- ### [SEARCH](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/SEARCH.md)
+- ### [SORTING](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/SORTING.md)

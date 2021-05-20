@@ -178,3 +178,4 @@
 - ### [README](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/README.md)
 - ### [PRODUCTS app](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/PRODUCTS.md)
 - ### [SEARCH](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/SEARCH.md)
+- ### [THE SHOPPING BAG](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/THE-SHOPPING-BAG.md)
