@@ -467,3 +467,337 @@ Visual representation of amended code:
   }
 }
 ```
+
+## Buttons for UI
+
+Let's give the quantity selector on the product detail template a facelift.
+
+```
+<div class="input-group">
+    <input class="form-control qty_input" type="number" name="quantity" value="1" min="1" max="99" data-item_id="{{ product.id }}" id="id_qty_{{ product.id }}">
+</div>
+```
+
+Now if you were wondering why this input element was inside an input group with only a single input, this is why:
+
+I'm going to attach some plus and minus buttons to this input to make it easier to use on mobile and also to align it more closely with our current black and white theme.
+To do this I can just use the built-in input-group-append
+`<div class="input-group-append"></div>`
+and input-group-prepend 
+`<div class="input-group-prepend"></div>`
+classes from bootstrap and toss a couple of buttons in them with the appropriate font awesome icons.
+
+```
+<div class="input-group">
+    <div class="input-group-prepend">
+        <button class="decrement-qty btn btn-black rounded-0" 
+            data-item_id="{{ product.id }}" id="decrement-qty_{{ product.id }}">
+            <span class="icon">
+                <i class="fas fa-minus"></i>
+            </span>
+        </button>
+    </div>
+    <input class="form-control qty_input" type="number" name="quantity" value="1" min="1" max="99" data-item_id="{{ product.id }}" id="id_qty_{{ product.id }}">
+    <div class="input-group-append">
+        <button class="increment-qty btn btn-black rounded-0" 
+            data-item_id="{{ product.id }}" id="increment-qty_{{ product.id }}">
+            <span class="icon">
+                <i class="fas fa-minus"></i>
+            </span>
+        </button>
+    </div>
+</div>
+```
+
+Note the extra attributes on these buttons
+
+`data-item_id="{{ product.id }}"`
+
+and the id attribute itself
+
+`id="increment-qty_{{ product.id }}"`
+
+These will be used when we write the JavaScript which will handle updating the input box itself, since these buttons won't do anything by default.
+1. Create an includes directory in the products template folder.
+2. And then the HTML file: 
+
+	`quantity_input_script.html`
+
+3. The script to increment the quantity:
+
+	```
+	$('.increment-qty').click(function(e) {
+		// Prevent default button action
+    	e.preventDefault();
+		// Climb up DOM tree to .input-group then down to first instance of .qty_input
+    	var closestInput = $(this).closest('.input-group').find('.qty_input')[0];
+		// Get value of closestInput as Integer
+    	var currentValue = parseInt($(closestInput).val());
+		// Add 1 to currentValue and set as closestInput
+    	$(closestInput).val(currentValue + 1);
+	})
+	```
+4. The script to decrement the quantity:
+
+	```
+	$('.decrement-qty').click(function(e) {
+		// Prevent default button action
+    	e.preventDefault();
+		// Climb up DOM tree to .input-group then down to first instance of .qty_input
+    	var closestInput = $(this).closest('.input-group').find('.qty_input')[0];
+		// Get value of closestInput as Integer
+    	var currentValue = parseInt($(closestInput).val());
+		// Subtract 1 from currentValue and set as closestInput
+    	$(closestInput).val(currentValue _ 1);
+	})
+	```
+
+5. To test, insert the templates into the HTML:
+
+	```
+	{% block postloadjs %}
+	{{ block.super }}
+	{% include 'products/includes/quantity_input_script.html’ %}
+	{% endblock %}
+	```
+
+6. Disable buttons past their min and max ranges
+
+	1. HTML max min ranges:
+
+		`<input class="form-control qty_input" type="number" name="quantity" value="1" min="1" max="99" data-item_id="{{ product.id }}" id="id_qty_{{ product.id }}">`
+
+
+	2. The script:
+
+		```
+		// The itemId being passed as an argument is coming from the id attribute above. 
+		// It is the id of the quantity of {{ product.id }}
+		function handleEnableDisable(itemId) {
+			// Get itemId as Integoer and assign it to currentValue
+    		var currentValue = parseInt($(`#id_qty_${itemId}`).val());
+			// if currentValue less than 2 assigned to minusDisabled
+    		var minusDisabled = currentValue < 2;
+			// if currentValue more than 99 assigned to plusDisabled
+    		var plusDisabled = currentValue > 98;
+			// Set buttons as disabled if values out of above range using .prop()
+    		$(`#decrement-qty_${itemId}`).prop('disabled', minusDisabled);
+    		$(`#increment-qty_${itemId}`).prop('disabled', plusDisabled);
+		}
+		```
+
+		i. This function needs to be called every time a button is clicked, and thus needs to be appended to the increment/decrement functions above:
+
+			```
+			$('.decrement-qty').click(function(e) {
+        		e.preventDefault();
+        		var closestInput = $(this).closest('.input-group').find('.qty_input')[0];
+        		var currentValue = parseInt($(closestInput).val());
+        		$(closestInput).val(currentValue - 1);
+				// Get the item_id from this data-item_id="{{ product.id }}"
+        		var itemId = $(this).data('item_id');
+				// Call handleEnableDisable function and argument
+        		handleEnableDisable(itemId);
+    		})
+
+			$('.increment-qty').click(function(e) {
+        		e.preventDefault();
+        		var closestInput = $(this).closest('.input-group').find('.qty_input')[0];
+        		var currentValue = parseInt($(closestInput).val());
+        		$(closestInput).val(currentValue + 1);
+				// Get the item_id from this data-item_id="{{ product.id }}"
+        		var itemId = $(this).data('item_id');
+				// Call handleEnableDisable function and argument
+        		handleEnableDisable(itemId);
+    		})
+			```
+
+7. As the default setting for the built-in buttons is 1, and as the scripts above are only run upon clicking the buttons, it is still possible to click the buttons and assign a value outside of the range - ie, from 1 to zero - upon page load. Thus, the minus button needs to de disabled by default on page load, and only come alive if a user first clicks plus. 
+
+	```
+	var allQtyInputs = $('.qty_input');
+	for(var i = 0; i < allQtyInputs.length; i++) {
+    	var itemId = $(allQtyInputs[i]).data('item_id');
+    	handleEnableDisable(itemId);
+	}
+	```
+
+	Since 1 is less than 2, but not greater than 98, the minus button will be inactive, but the plus button active when the page loads.
+
+8. Associate the built-in up and down arrows of the input box with the + and - buttons:
+
+	```
+	$('.qty_input').change(function() {
+    	var itemId = $(this).data('item_id');
+    	handleEnableDisable(itemId);
+	})
+	```
+
+The entire JS:
+```
+<script type="text/javascript">
+
+    // Disable +/- buttons outside 1-99 range
+    function handleEnableDisable(itemId) {
+        var currentValue = parseInt($(`#id_qty_${itemId}`).val());
+        var minusDisabled = currentValue < 2;
+        var plusDisabled = currentValue > 98;
+        $(`#decrement-qty_${itemId}`).prop('disabled', minusDisabled);
+        $(`#increment-qty_${itemId}`).prop('disabled', plusDisabled);
+    }
+
+    // Ensure proper enabling/disabling of all inputs on page load
+    var allQtyInputs = $('.qty_input');
+    for(var i = 0; i < allQtyInputs.length; i++) {
+        var itemId = $(allQtyInputs[i]).data('item_id');
+        handleEnableDisable(itemId);
+    }
+
+    // Check enable/disable every time the input is changed
+    $('.qty_input').change(function() {
+        var itemId = $(this).data('item_id');
+        handleEnableDisable(itemId);
+    })
+
+    // Increment quantity
+    $('.increment-qty').click(function(e) {
+        e.preventDefault();
+        var closestInput = $(this).closest('.input-group').find('.qty_input')[0];
+        var currentValue = parseInt($(closestInput).val());
+        $(closestInput).val(currentValue + 1);
+        var itemId = $(this).data('item_id');
+        handleEnableDisable(itemId);
+    })
+    // Decrement quantity
+    $('.decrement-qty').click(function(e) {
+        e.preventDefault();
+        var closestInput = $(this).closest('.input-group').find('.qty_input')[0];
+        var currentValue = parseInt($(closestInput).val());
+        $(closestInput).val(currentValue - 1);
+        var itemId = $(this).data('item_id');
+        handleEnableDisable(itemId);
+    })
+</script>
+```
+
+## Updating quantity from Shopping Bag
+### HTML
+The bag at the moment just display the template quantity value. We can change this and use virtually the same form as we do on the product page.
+
+1. Remove {{ item.quantity }}
+2. In its place, use form:
+
+	```
+	<form class="form update-form" method="POST" action="">
+        {% csrf_token %}
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+			    <button class="decrement-qty btn btn-sm btn-black rounded-0" data-item_id="{{ item.item_id }}" id="decrement-qty_{{ item.item_id }}">
+				    <span">
+					    <i class="fas fa-minus fa-sm"></i>
+				    </span>
+			    </button>
+                </div>
+                <input class="form-control form-control-sm qty_input" type="number" name="quantity" value="{{ item.quantity }}" min="1" max="99" data-item_id="{{ item.item_id }}" id="id_qty_{{ item.item_id }}">
+                <div class="input-group-append">
+			    <button class="increment-qty btn btn-sm btn-black rounded-0" data-item_id="{{ item.item_id }}" id="increment-qty_{{ item.item_id }}">
+				    <span">
+					    <i class="fas fa-plus fa-sm"></i>
+				    </span>
+			    </button>
+		    </div>
+		    {% if item.product.has_sizes %}
+			    <input type="hidden" name="product_size" value="{{ item.size }}">
+		    {% endif %}
+		    </div>
+        </div>
+	</form>
+	```
+
+
+      1. Note that we are using `item.item_id` here instead of `product.id` as we do on the product page. This is because of the for loop `{% for item in bag_items %}`
+      2. Note also that the value in the `<input>` box has been amended, to reflect the quantity in the bag:
+
+			`value="{{ item.quantity }}"`
+
+3. Because there is no size selector box on this page, we’ll need to submit the size of the item the user wants to update or remove in a hidden input field in the form, if the product does in fact have sizes.
+
+	```
+	{% if item.product.has_sizes %}
+		<input type="hidden" name="product_size" value="{{ item.size }}">
+	{% endif %}
+	```
+
+4. Check how page renders.
+    1. We have an error coming from the contexts.py file, as the page inspector is showing the value attribute as `value=“{item.by_size: {‘m’: 1}}`
+	2. The inner loop of the contexts.py file needs to be `'quantity': quantity,` rather than `'quantity': item_data,`
+
+5. Use the script from the include folder to make the buttons work:
+
+	```
+	{% block postloadjs %}
+	{{ block.super }}
+	{% include 'products/includes/quantity_input_script.html' %}
+	{% endblock %}
+	```
+
+6. Submit the form
+    1. We do not really want a submit button in this form, as it will cause reloading of the page.
+    2. Instead, we can use `<a>` without href=“” attributes and submit using JavaScript:
+        1. The a buttons:
+			```
+			<a class="update-link text-info"><small>Update</small></a>
+			<a class="remove-item text-danger"><small>Remove</small></a>
+			```
+		2. The remove button needs to be pushed to the right, and have some attributes attached to it:
+
+			`<a class="remove-item text-danger float-right" id="remove_{{ item.item_id }}" data-size="{{ item.size }}"><small>Remove</small></a>`
+
+			i. The id attribute discerns the item itself
+
+			ii. The data-size attribute discerns the size of the article the user wishes to remove
+
+			iii. They will work together to only remove the size in question if the same article is being purchased but in two different sizes
+
+### JS
+
+1. .update-link
+
+    ```
+	// Update qty on click
+    $('.update-link').click(function(e) {
+        var form = $(this).prev('.update-form');
+        form.submit();
+    })
+	```
+
+
+2. .remove-item
+
+	```
+	// Remove item and reload on click
+	$('.remove-item').click(function(e) {
+        var csrfToken = "{{ csrf_token }}";
+        var itemId = $(this).attr('id').split('remove_')[1];
+        var size = $(this).data('size');
+        var url = `/bag/remove/${itemId}`;
+        var data = {'scrfmiddlewaretoken': csrfToken, 'size': size};
+
+        $.post(url, data)
+        .done(function() {
+            location.reload();
+        })
+    })
+	```
+
+### CSS
+1. Attach cursor pointer to the two anchor elements:
+
+	```
+	.update-link,
+	.remove-item {
+    	cursor: pointer;
+	}
+	```
+
