@@ -781,7 +781,7 @@ The bag at the moment just display the template quantity value. We can change th
         var csrfToken = "{{ csrf_token }}";
         var itemId = $(this).attr('id').split('remove_')[1];
         var size = $(this).data('size');
-        var url = `/bag/remove/${itemId}`;
+        var url = `/bag/remove/${itemId}/`;
         var data = {'scrfmiddlewaretoken': csrfToken, 'size': size};
 
         $.post(url, data)
@@ -800,6 +800,170 @@ The bag at the moment just display the template quantity value. We can change th
     	cursor: pointer;
 	}
 	```
+
+## Adjusting the Shopping Bag
+
+1. Import reverse
+
+	`from django.shortcuts import render, redirect, reverse`
+
+2. The view:
+
+	```
+	def adjust_bag(request, item_id):
+    	""" Adjust the quantity of the specified product to the specified amount """
+
+    	quantity = int(request.POST.get('quantity'))
+    	size = None
+    	if 'product_size' in request.POST:
+        	size = request.POST['product_size']
+    	bag = request.session.get('bag', {})
+
+    	if size:
+	  	# If there's a size drill into the items by size dictionary, find that specific size and either set its quantity to the updated one or remove it if the quantity submitted is zero.
+			if quantity > 0:
+				bag[item_id]['items_by_size'][size] = quantity
+			else:
+				del bag[item_id]['items_by_size'][size]
+				if not bag[item_id]['items_by_size']:
+					bag.pop(item_id)
+    	else:
+		# Otherwise either set its quantity to the updated one or remove it if the quantity submitted is zero.
+			if quantity > 0:
+				bag[item_id] = quantity
+			else:
+				bag.pop(item_id)
+
+    	request.session['bag'] = bag
+
+    	return redirect(reverse('view_bag'))
+	```
+
+3. The urls.py urlpattern:
+
+	`path('adjust/<item_id>/', views.adjust_bag, name='adjust_bag'),`
+
+4. The HTML template:
+
+	`<form class="form update-form" method="POST" action="{% url 'adjust_bag' item.item_id %}">`
+
+
+## Deleting items from the shopping bag
+
+1. Import HttpResponse:
+
+	`from django.shortcuts import render, redirect, reverse, HttpResponse`
+
+2. The view
+
+	```
+	def remove_from_bag(request, item_id):
+    	""" Remove the specified product from the bag """
+		# Use try block to catch errors
+    	try:
+        		size = None
+        		if 'product_size' in request.POST:
+            		size = request.POST['product_size']
+        		bag = request.session.get('bag', {})
+
+        		if size:
+            		del bag[item_id]['items_by_size'][size]
+            		if not bag[item_id]['items_by_size']:
+                		bag.pop(item_id)
+			else:
+            		bag.pop(item_id)
+
+			request.session['bag'] = bag
+			return HttpResponse(status=200)
+
+		# If error, return the error to the console
+    	except Exception as e:
+        		return HttpResponse(status=500)
+	```
+
+3. The urls.py urlpattern:
+
+	`path(‘remove/<item_id>/', views.remove_from_bag, name=‘remove_from_bag'),`
+
+4. Make sure all variables are correctly named - for instance, in the JS, we are looking for ’size’, whereas in the views, we currently look for ‘product_size’. Either is good, so long as they are both the same. But, choose what will be easier for someone unfamiliar with the code to understand. Here, we shall change the JS and the HTML to ‘product_size’.
+
+JS change:
+
+```
+// Remove item and reload on click
+$('.remove-item').click(function(e) {
+    var csrfToken = "{{ csrf_token }}";
+    var itemId = $(this).attr('id').split('remove_')[1];
+    // was var size = $(this).data('product_size');
+    var size = $(this).data('product_size');
+    var url = `/bag/remove/${itemId}/`;
+    // was var data = {'csrfmiddlewaretoken': csrfToken, 'product_size': size};
+    var data = {'csrfmiddlewaretoken': csrfToken, 'product_size': size};
+    $.post(url, data)
+    .done(function() {
+    	location.reload();
+    })
+})
+```
+
+HTML change:
+
+`<a class="remove-item text-danger float-right" id="remove_{{ item.item_id }}" <!-- was data-size --> data-product_size="{{ item.size }}"><small>Remove</small></a>`
+
+5. Replace slim version of jQuery with min version, as slim version cannot handle POST
+
+## Updating the subtotal value
+
+There are probably many ways to do this, within the views already created. However, a perhaps better way to do this is using a [custom template directory](https://docs.djangoproject.com/en/3.2/howto/custom-template-tags/).
+
+The django documentation looks straightforward concerning this. 
+
+1. Create templatetags directory, at the same level as models.py, views.py, etc
+2. Create .py file
+3. Create empty `__init__.py` file to initialise the above file
+4. Inside the .py file (here, this one is called bag_tools.py), import template from django:
+
+	`from django import template`
+
+5. Write the view. Updating the subtotal for a product is simply price*quantity
+
+	```
+	def calc_subtotal(price, quantity):
+    	return price * quantity
+	```
+
+    1. The view inherits price and quantity from the item
+    2. The view returns price * quantity
+
+6. To register this filter, create a variable called register which is an instance of template.Library():
+
+	`register = template.Library()`
+
+7. Use the @register.filter() decorator to register the function as a template filter:
+	`@register.filter(name='calc_subtotal')`
+
+8. Load it in the bag template with {% load bag_tools %}:
+
+	```
+	{% extends "base.html" %}
+	{% load static %}
+	{% load bag_tools %}
+	```
+
+9. Add the filter to the template of the HTML:
+
+	`${{ item.product.price }}`
+
+	becomes
+
+	`${{ item.product.price | calc_subtotal:item.quantity }}`
+
+	where item.product.price is passed to the inherited function argument, and item.quantity is the second argument.
+
+10. Quit and restart the server to activate the filter:
+	
+	`python3 manage.py runserver`
+
 
 - ### [README](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/README.md)
 - ### [PRODUCTS app](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/PRODUCTS.md)
