@@ -142,3 +142,4 @@ Using it here means we're looking for the name field of the category model and w
 - ### [PRODUCTS app](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/PRODUCTS.md)
 - ### [SORTING](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/SORTING.md)
 - ### [THE SHOPPING BAG](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/THE-SHOPPING-BAG.md)
+- ### [TOASTS & MESSAGES](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/TOASTS-&-MESSAGES.md)

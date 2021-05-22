@@ -142,7 +142,7 @@
 
 		`{% block postloadjs %}`
 
-    2. Add also a block.super block. This block ensure that the JS is APPENDED TO the url rather than replacing it: 
+    2. Add also a block.super block. This block ensure that the JS is APPENDED TO the JS script rather than replacing it: 
 	
 		`{{ block.super }}`
 
@@ -179,3 +179,4 @@
 - ### [PRODUCTS app](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/PRODUCTS.md)
 - ### [SEARCH](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/SEARCH.md)
 - ### [THE SHOPPING BAG](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/THE-SHOPPING-BAG.md)
+- ### [TOASTS & MESSAGES](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/TOASTS-&-MESSAGES.md)
