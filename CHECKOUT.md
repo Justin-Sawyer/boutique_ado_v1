@@ -705,7 +705,7 @@ With all of the above done for the backend, the database, we need now to create 
 
 ## The template
 
-1 Create templates folder at same level as views.py
+1. Create templates folder at same level as views.py
 2. Create checkout folder
 3. Create html file `checkout.html`
 
