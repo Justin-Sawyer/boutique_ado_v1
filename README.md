@@ -23,6 +23,10 @@
 - ### [SORTING](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/SORTING.md)
 - ### [THE SHOPPING BAG](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/THE-SHOPPING-BAG.md)
 - ### [TOASTS & MESSAGES](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/TOASTS-&-MESSAGES.md)
+- ### [CHECKOUT](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/CHECKOUT.md)
+- ### [STRIPE](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/STRIPE.md)
+- ### [STRIPE-WEBHOOKS](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/STRIPE-WEBHOOKS.md)
+- ### [PROFILE-app](https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/PROFILE-app.md)
 
 
 # Set Up
