@@ -390,7 +390,8 @@ def profile(request):
             messages.success(request, 'Profile updated successfully')
 
     # Populate the form with the user's profile info
-    form = UserProfileForm(instance=profile)
+    else:
+        form = UserProfileForm(instance=profile)
 
     template = 'profiles/profile.html'
     context = {
@@ -418,7 +419,8 @@ def profile(request):
             messages.success(request, 'Profile updated successfully')
 
     # Populate the form with the user's profile info
-    form = UserProfileForm(instance=profile)
+    else:
+        form = UserProfileForm(instance=profile)
     orders = profile.orders.all()
 
     template = 'profiles/profile.html'
