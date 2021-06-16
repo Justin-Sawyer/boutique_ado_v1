@@ -41,7 +41,7 @@
 
 		And we then use the "original" sortkey to manipulate it to annotate our products.
 
-		<img src="media/screenshots/sortkey.png">
+		<img src="assets/screenshots/sortkey.png">
 
 6. Set an if statement, if needed, to search by Lower, so that if users type alabama instead of Alabama, the result will be returned:
 

@@ -182,7 +182,7 @@ The checkout functionality needs to be in a dedicated app.
 
 	2. See image below for explanation of self.order_total using the Sum functionality:
 
-		<img src="media/screenshots/sum-functionality-demonstrated.png" />
+		<img src="assets/screenshots/sum-functionality-demonstrated.png" />
 
 4. Generate the string method for each model
 
@@ -217,8 +217,8 @@ The checkout functionality needs to be in a dedicated app.
             return f'SKU {self.product.sku} on order {self.order.order_number}'
     ```
 
-    <img src="media/screenshots/string-method-Order-order_number.png" />
-    <img src="media/screenshots/string-method-OrderLineItem-SKU-and-order_number.png" />
+    <img src="assets/screenshots/string-method-Order-order_number.png" />
+    <img src="assets/screenshots/string-method-OrderLineItem-SKU-and-order_number.png" />
     
 ##### Entire code
 ```

@@ -1,7 +1,7 @@
 ## STRIPE WEBHOOKS
 
 #### Flow diagram for how webhooks will work
-<img src="media/screenshots/flow-diagram-for-stripe-payments.png">
+<img src="assets/screenshots/flow-diagram-for-stripe-payments.png">
 
 Payment works, and we have stopped double pressing of the payment button, and put in place a spinner to tell the cutomer that the payment is going through and the order is being made.
 

@@ -179,7 +179,7 @@ Write/copy/adjust as necessary
 
 ### Formatting the allauth templates
 
-<a href="https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/media/pdf/allauth-rendering.pdf">allauth rendering solution pdf</a>
+<a href="https://github.com/Justin-Sawyer/boutique_ado_v1/blob/master/assets/pdf/allauth-rendering.pdf">allauth rendering solution pdf</a>
 
 #### New users and registered users side note
 
